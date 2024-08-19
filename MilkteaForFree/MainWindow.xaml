@@ -1,0 +1,44 @@
+﻿<Window x:Class="MilkteaForFree.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MilkteaForFree"
+        mc:Ignorable="d"
+        Title="Login" Height="450" Width="800" Background="Azure">
+    <Grid>
+        <Border Background="#34495E" CornerRadius="10" Padding="20" Margin="50">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <!-- Header -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Username -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Password -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Button -->
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Header Text -->
+                <TextBlock Text="Login" Foreground="White" FontSize="24" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0,0,0,20" VerticalAlignment="Top"/>
+
+                <!-- Username Label and TextBox -->
+                <TextBlock Text="Username:" VerticalAlignment="Center" Grid.Row="1" Margin="10" Foreground="White" FontSize="16"/>
+                <TextBox x:Name="UsernameTextBox" Grid.Row="1" Grid.Column="1" Margin="10" Padding="5" FontSize="16" Background="#ECF0F1" BorderThickness="0"/>
+
+                <!-- Password Label and PasswordBox -->
+                <TextBlock Text="Password:" VerticalAlignment="Center" Grid.Row="2" Margin="10" Foreground="White" FontSize="16"/>
+                <PasswordBox x:Name="PasswordBox" Grid.Row="2" Grid.Column="1" Margin="10" Padding="5" FontSize="16" Background="#ECF0F1" BorderThickness="0"/>
+
+                <!-- Login Button -->
+                <Button Content="Login" Grid.Row="3" Grid.ColumnSpan="2" Margin="10" Padding="10,5" Width="150" HorizontalAlignment="Center" FontSize="16" Background="#1ABC9C" Foreground="White" BorderThickness="0" Cursor="Hand" Click="LoginButton_Click"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
