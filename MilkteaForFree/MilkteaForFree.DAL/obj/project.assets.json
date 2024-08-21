@@ -4411,19 +4411,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\noell\\.nuget\\packages\\": {}
+    "C:\\Users\\nhatt\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\3W616\\FullProject\\MilkteaForFree\\MilkteaForFree.DAL\\MilkteaForFree.DAL.csproj",
+      "projectUniqueName": "C:\\Project\\PRN212\\Lag\\MilkteaForFree\\MilkteaForFree.DAL\\MilkteaForFree.DAL.csproj",
       "projectName": "MilkteaForFree.DAL",
-      "projectPath": "E:\\3W616\\FullProject\\MilkteaForFree\\MilkteaForFree.DAL\\MilkteaForFree.DAL.csproj",
-      "packagesPath": "C:\\Users\\noell\\.nuget\\packages\\",
-      "outputPath": "E:\\3W616\\FullProject\\MilkteaForFree\\MilkteaForFree.DAL\\obj\\",
+      "projectPath": "C:\\Project\\PRN212\\Lag\\MilkteaForFree\\MilkteaForFree.DAL\\MilkteaForFree.DAL.csproj",
+      "packagesPath": "C:\\Users\\nhatt\\.nuget\\packages\\",
+      "outputPath": "C:\\Project\\PRN212\\Lag\\MilkteaForFree\\MilkteaForFree.DAL\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\noell\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\nhatt\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -4499,7 +4499,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.304/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

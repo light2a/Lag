@@ -24,7 +24,7 @@ namespace MilkteaForFree
 
             if (user != null)
             {
-                MessageBox.Show("Login successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                //MessageBox.Show("Login successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 // Navigate to the next window, e.g., the Menu window
                 var menuWindow = new Menu();
                 menuWindow.Show();

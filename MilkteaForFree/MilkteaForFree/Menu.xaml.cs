@@ -1,18 +1,7 @@
-﻿using MilkteaForFree.DAL.Entities;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using MilkteaForFree.BLL.Response;
 using static MilkteaForFree.Menu;
 
 namespace MilkteaForFree
@@ -26,15 +15,25 @@ namespace MilkteaForFree
         public ObservableCollection<Order> OrderHistory { get; set; }
         public ObservableCollection<OrderDetail> OrderDetails { get; set; } = new ObservableCollection<OrderDetail>();
 
+        private List<MilkteaForFree.DAL.Entities.Order> orders;
+
         public Menu()
         {
             InitializeComponent();
             DataContext = this;
 
+            InitializeOrderHistory();
+
             Drinks = new ObservableCollection<Drink>();
             OrderHistory = new ObservableCollection<Order>();
 
-            LoadDummyData();
+            //Set default value for date picker
+            FromDatePicker.SelectedDate = DateTime.Now;
+            ToDatePicker.SelectedDate = DateTime.Now;
+            FromDatePicker.DisplayDateEnd = ToDatePicker.DisplayDate;
+            ToDatePicker.DisplayDateEnd = DateTime.Now;
+
+            //LoadDummyData();
         }
 
         private void LoadDummyData()
@@ -49,19 +48,19 @@ namespace MilkteaForFree
             Drinks.Add(new Drink { DrinkId = 7, CategoryID = 4, Name = "Coffee Milk Tea", UnitPrice = 38000m, DrinkStatus = 1 });
             Drinks.Add(new Drink { DrinkId = 8, CategoryID = 4, Name = "Black Sugar Milk Tea", UnitPrice = 40000m, DrinkStatus = 1 });
 
-            OrderHistory.Add(new Order
-            {
-                OrderID = 1,
-                UserID = 2,
-                OrderDate = new DateTime(2024, 8, 1, 10, 30, 0),
-                Total = 110000m,
-                OrderStatus = "Payed",
-                OrderDetails = new ObservableCollection<OrderDetail>
-                {
-                    new OrderDetail { OrderDetailID = 1, OrderID = 1, DrinkID = 1, UnitPrice = 35000m, Quantity = 2, Discount = 0 },
-                    new OrderDetail { OrderDetailID = 2, OrderID = 1, DrinkID = 2, UnitPrice = 40000m, Quantity = 1, Discount = 0 }
-                }
-            });
+            //OrderHistory.Add(new Order
+            //{
+            //    OrderID = 1,
+            //    UserID = 2,
+            //    OrderDate = new DateTime(2024, 8, 1, 10, 30, 0),
+            //    Total = 110000m,
+            //    OrderStatus = "Payed",
+            //    OrderDetails = new ObservableCollection<OrderDetail>
+            //    {
+            //        new OrderDetail { OrderDetailID = 1, OrderID = 1, DrinkID = 1, UnitPrice = 35000m, Quantity = 2, Discount = 0 },
+            //        new OrderDetail { OrderDetailID = 2, OrderID = 1, DrinkID = 2, UnitPrice = 40000m, Quantity = 1, Discount = 0 }
+            //    }
+            //});
             // Add other orders similarly
         }
 
@@ -79,7 +78,7 @@ namespace MilkteaForFree
             public int OrderID { get; set; }
             public int UserID { get; set; }
             public DateTime OrderDate { get; set; }
-            public decimal Total { get; set; }
+            public decimal? Total { get; set; }
             public string OrderStatus { get; set; }
             public ObservableCollection<OrderDetail> OrderDetails { get; set; }
         }
@@ -187,6 +186,9 @@ namespace MilkteaForFree
             var fromDate = FromDatePicker.SelectedDate;
             var toDate = ToDatePicker.SelectedDate;
 
+            OrderDetailListView.SelectedIndex = 0;
+            OrderDetailListView.ItemsSource = null;
+
             if (fromDate == null || toDate == null)
             {
                 MessageBox.Show("Please select both start and end dates.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -201,10 +203,89 @@ namespace MilkteaForFree
             }
 
             // Filter orders by the selected date range
-            var filteredOrders = OrderHistory.Where(o => o.OrderDate >= fromDate && o.OrderDate <= toDate).ToList();
+            var filteredOrders = orders.Where(o => o.OrderDate >= fromDate && o.OrderDate <= toDate).ToList();
 
             // Update the ListView to display the filtered orders
             OrderHistoryListView.ItemsSource = filteredOrders;
+        }
+
+        private void InitializeOrderHistory()
+        {
+            OrderService orderService = new OrderService();
+            orders = orderService.GetList().ToList();
+            //MessageBox.Show("" + orders.Count, "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            for (int i = 0; i < orders.Count; i++)
+            {
+                MilkteaForFree.DAL.Entities.Order item = orders[i];
+                Order order = new Order
+                {
+                    OrderID = item.OrderId,
+                    OrderDate = item.OrderDate,
+                    Total = item.Total,
+                    UserID = 2,
+                };
+                //OrderHistory.Add(order);
+                
+            }
+            OrderHistoryListView.ItemsSource = orders;
+        }
+
+        private void FromDatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ToDatePicker.DisplayDateStart = FromDatePicker.SelectedDate;
+        }
+
+        private void ToDatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            FromDatePicker.DisplayDateEnd = ToDatePicker.SelectedDate;
+        }
+
+        public class OrderDetailView()
+        {
+            public string DrinkName { get; set; }
+            public double Discount { get; set; }
+            public decimal? UnitPrice { get; set; }
+            public int Quantity { get; set; }
+        }
+
+        private void OrderHistoryListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            MilkteaForFree.DAL.Entities.Order item = (MilkteaForFree.DAL.Entities.Order) OrderHistoryListView.SelectedItem;
+            //MessageBox.Show("" + item.OrderId, "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            List<OrderDetailView> listOrderDetailViews = new List<OrderDetailView>();
+
+            OrderService orderService = new OrderService();
+            try
+            {
+                if (OrderHistoryListView.SelectedItem == null)
+                {
+                    OrderDetailListView.SelectedIndex = 0;
+                    OrderDetailListView.Items.Clear();
+                    return;
+                }
+
+
+                List<OrderDetailResponse> listItems = orderService.GetOrderDetailsByOrderId(item.OrderId).ToList();
+
+                foreach (OrderDetailResponse od in listItems)
+                {
+                    listOrderDetailViews.Add(new OrderDetailView
+                    {
+                        DrinkName = od.Drink.DrinkName,
+                        Discount = od.Discount,
+                        Quantity = od.Quantity,
+                        UnitPrice = od.UnitPrice
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+            
+
+            
+            OrderDetailListView.ItemsSource = listOrderDetailViews;
         }
     }
 }

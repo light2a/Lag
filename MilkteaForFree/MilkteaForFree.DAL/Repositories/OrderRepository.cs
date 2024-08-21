@@ -30,6 +30,14 @@ namespace MilkteaForFree.DAL.Repositories
                     .ToList();
             }
         }
+
+        public List<Order> GetListOrder()
+        {
+            using (var context = new MilkTeaContext())
+            {
+                return context.Orders.Include(o => o.OrderDetails).ToList();
+            }
+        }
     }
 
 }
